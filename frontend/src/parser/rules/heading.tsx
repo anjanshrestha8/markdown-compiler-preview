@@ -1,4 +1,5 @@
 import type { ReactElement } from "react"
+import { REGEX_FOR } from "../regex";
 
 export interface HeadingToken {
   type: "heading";
@@ -6,10 +7,8 @@ export interface HeadingToken {
   text: string;
 }
 
-const HEADING_PATTERN = /^(#{1,6})\s+(.+)$/;
-
-export function parseHeading(line: string): HeadingToken | null {
-  const match = line.match(HEADING_PATTERN);
+export const parseHeading = (line: string): HeadingToken | null =>{
+  const match = line.match(REGEX_FOR.HEADING);
   if (!match) return null;
 
   return {
@@ -19,7 +18,7 @@ export function parseHeading(line: string): HeadingToken | null {
   };
 }
 
-export function renderHeading(line: string): ReactElement | null {
+export const  renderHeading = (line: string): ReactElement | null => {
   const token = parseHeading(line);
   if (!token) return null;
 

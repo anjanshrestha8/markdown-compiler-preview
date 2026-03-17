@@ -1,12 +1,11 @@
 import { useState } from "react"
 import { renderHeading } from "./parser/rules/heading"
+import { renderParagraph } from "./parser/rules/paragrpahs/paragraph"
 
 function App() {
   const [input, setInput] = useState("# Hello World")
-
-  const lines = input.split("\n")
-
-  console.log(lines)
+console.log(input)
+  const lines = input.split("\n");
 
   return (
     <div>
@@ -19,9 +18,7 @@ function App() {
       />
       <div>
         {lines.map((line, i) => {
-          const result = renderHeading(line);
-console.log(result,'result')
-          return result ? result : <p key={i}>{line}</p>;
+          return renderHeading(line) ?? renderParagraph(line,i);
         })}
       </div>
     </div>
