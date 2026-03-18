@@ -1,71 +1,123 @@
 import { useState } from "react"
 import { renderHeading } from "./parser/rules/heading"
 import { renderParagraph } from "./parser/rules/paragrpahs/paragraph"
+import "./App.css"
 
 function App() {
   const [input, setInput] = useState("# Hello World\n\nStart typing your markdown here...")
 
   const lines = input.split("\n")
+  const charCount = input.length
+  const wordCount = input.trim().split(/\s+/).filter(Boolean).length
+  const lineCount = lines.length
 
   return (
     <div style={{ 
       minHeight: '100vh',
-      backgroundColor: '#f5f5f5',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      backgroundColor: '#fafafa',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
     }}>
       {/* Header */}
       <header style={{
-        backgroundColor: '#2c3e50',
+        backgroundColor: '#1a202c',
         color: 'white',
-        padding: '1.5rem 2rem',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        padding: '1rem 2rem',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+        borderBottom: '3px solid #2d3748'
       }}>
-        <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 600 }}>
-          Markdown Live Preview
-        </h1>
+        <div style={{ 
+          maxWidth: '1400px', 
+          margin: '0 auto',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600, letterSpacing: '-0.025em' }}>
+            Markdown Editor
+          </h1>
+          <div style={{ 
+            display: 'flex', 
+            gap: '1.5rem', 
+            fontSize: '0.875rem',
+            color: '#a0aec0'
+          }}>
+            <span>{lineCount} lines</span>
+            <span>{wordCount} words</span>
+            <span>{charCount} chars</span>
+          </div>
+        </div>
       </header>
 
       {/* Split Pane Container */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '1.5rem',
-        padding: '1.5rem',
+        gap: '1rem',
+        padding: '1rem',
         maxWidth: '1400px',
-        margin: '0 auto'
+        margin: '0 auto',
+        height: 'calc(100vh - 80px)'
       }}>
         {/* Editor Panel */}
         <div style={{
           backgroundColor: 'white',
-          borderRadius: '8px',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          overflow: 'hidden'
+          borderRadius: '6px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+          border: '1px solid #e2e8f0',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column'
         }}>
           <div style={{
-            padding: '0.75rem 1rem',
-            backgroundColor: '#34495e',
-            color: 'white',
-            fontSize: '0.875rem',
-            fontWeight: 500,
-            borderBottom: '1px solid #2c3e50'
+            padding: '0.625rem 1rem',
+            backgroundColor: '#f7fafc',
+            color: '#2d3748',
+            fontSize: '0.8125rem',
+            fontWeight: 600,
+            borderBottom: '1px solid #e2e8f0',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em'
           }}>
-            Editor
+            <span>✏️ Editor</span>
+            <button
+              onClick={() => setInput("")}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#e53e3e',
+                cursor: 'pointer',
+                fontSize: '0.75rem',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '3px',
+                transition: 'background 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fed7d7'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            >
+              Clear
+            </button>
           </div>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type markdown here..."
+            placeholder="# Start writing markdown..."
+            spellCheck={false}
             style={{
+              flex: 1,
               width: '100%',
-              height: 'calc(100vh - 220px)',
-              padding: '1.25rem',
+              padding: '1.5rem',
               border: 'none',
               outline: 'none',
-              fontSize: '0.95rem',
-              lineHeight: '1.6',
-              fontFamily: '"Monaco", "Menlo", "Courier New", monospace',
+              fontSize: '0.9375rem',
+              lineHeight: '1.7',
+              fontFamily: '"SF Mono", "Monaco", "Inconsolata", "Fira Code", "Droid Sans Mono", "Source Code Pro", monospace',
               resize: 'none',
-              backgroundColor: '#fafafa'
+              backgroundColor: 'white',
+              color: '#2d3748',
+              caretColor: '#3182ce'
             }}
           />
         </div>
@@ -73,29 +125,39 @@ function App() {
         {/* Preview Panel */}
         <div style={{
           backgroundColor: 'white',
-          borderRadius: '8px',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          overflow: 'hidden'
+          borderRadius: '6px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+          border: '1px solid #e2e8f0',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column'
         }}>
           <div style={{
-            padding: '0.75rem 1rem',
-            backgroundColor: '#16a085',
-            color: 'white',
-            fontSize: '0.875rem',
-            fontWeight: 500,
-            borderBottom: '1px solid #149174'
+            padding: '0.625rem 1rem',
+            backgroundColor: '#f7fafc',
+            color: '#2d3748',
+            fontSize: '0.8125rem',
+            fontWeight: 600,
+            borderBottom: '1px solid #e2e8f0',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em'
           }}>
             Preview
           </div>
-          <div style={{
-            padding: '1.25rem',
-            height: 'calc(100vh - 220px)',
-            overflowY: 'auto',
-            lineHeight: '1.7',
-            color: '#333'
-          }}>
+          <div 
+            className="markdown-preview"
+            style={{
+              flex: 1,
+              padding: '1.5rem 2rem',
+              overflowY: 'auto',
+              lineHeight: '1.75',
+              color: '#1a202c'
+            }}
+          >
             {lines.map((line, i) => {
-              return renderHeading(line) ?? renderParagraph(line,i);
+              const heading = renderHeading(line, i);
+              if (heading) return heading;
+              return renderParagraph(line, i);
             })}
           </div>
         </div>
