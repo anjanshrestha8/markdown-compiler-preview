@@ -6,7 +6,7 @@ A browser-based Markdown compiler and live preview tool built with **React**, **
 
 - Live Markdown preview as you type
 - Custom Markdown parser using regex rules
-- Supports headings (`h1`–`h6`), paragraphs, **bold**, and _italic_ inline formatting
+- Supports headings (`h1`–`h6`), paragraphs, **bold**, _italic_ inline formatting, and links
 - Line-by-line parsing engine
 
 ## Supported Syntax
@@ -18,6 +18,8 @@ A browser-based Markdown compiler and live preview tool built with **React**, **
 | `### Heading 3` | `<h3>` |
 | `**bold**` | `<strong>` |
 | `*italic*` | `<em>` |
+| `[text](url)` | `<a href="url">text</a>` |
+| `[text](url "title")` | `<a href="url" title="title">text</a>` |
 | Any plain text | `<p>` |
 
 ## How It Works
@@ -25,8 +27,9 @@ A browser-based Markdown compiler and live preview tool built with **React**, **
 The app splits the markdown input by newlines and processes each line through a rule chain:
 
 1. **Heading rule** — matches lines starting with `#` (up to `######`) and returns the corresponding `<h1>`–`<h6>` element
-2. **Paragraph rule** — fallback for any non-heading line, wraps content in a `<p>` tag
-3. **Inline parser** — runs inside paragraphs, scanning for `**bold**` and `*italic*` patterns and returning a mixed array of strings and React elements
+2. **Link rule** — matches markdown link syntax `[text](url)` and `[text](url "title")`, renders as `<a>` tags with optional title attributes
+3. **Paragraph rule** — fallback for any non-heading, non-link line, wraps content in a `<p>` tag
+4. **Inline parser** — runs inside paragraphs, scanning for `**bold**` and `*italic*` patterns and returning a mixed array of strings and React elements
 
 ## Project Structure
 
@@ -36,9 +39,10 @@ frontend/
 │   ├── App.tsx               # Root component — textarea input + live preview renderer
 │   ├── main.tsx              # Entry point
 │   └── parser/
-│       ├── regex/            # Shared regex patterns (REGEX_FOR.HEADING, REGEX_FOR.PARAGRAPH)
+│       ├── regex/            # Shared regex patterns (REGEX_FOR.HEADING, REGEX_FOR.PARAGRAPH, REGEX_FOR.LINK)
 │       └── rules/
 │           ├── heading.tsx        # Parses and renders h1–h6
+│           ├── link.tsx           # Parses markdown links with optional title attributes
 │           └── paragrpahs/
 │               ├── inline.tsx     # Parses inline bold and italic formatting
 │               └── paragraph.tsx  # Wraps inline-parsed content in a <p> tag

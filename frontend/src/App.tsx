@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { renderHeading } from "./parser/rules/heading"
 import { renderParagraph } from "./parser/rules/paragrpahs/paragraph"
+import { renderLink } from "./parser/rules/link"
 import "./App.css"
 
 function App() {
@@ -157,6 +158,8 @@ function App() {
             {lines.map((line, i) => {
               const heading = renderHeading(line, i);
               if (heading) return heading;
+              const link = renderLink(line, i);
+              if (link) return link;
               return renderParagraph(line, i);
             })}
           </div>
